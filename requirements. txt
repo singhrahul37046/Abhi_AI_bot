@@ -1,6 +1,1 @@
-pyTelegramBotAPI
-google-generativeai
-flask
-
-
-
+pip install --upgrade pyTelegramBotAPI google-generativeai flask
