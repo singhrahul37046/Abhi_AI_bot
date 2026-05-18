@@ -5,6 +5,7 @@ from threading import Thread
 import telebot
 import google.generativeai as genai
 
+# Server Setup
 app = Flask('')
 
 @app.route('/')
@@ -22,7 +23,7 @@ GEMINI_KEY = "AIzaSyA5V-kWwYOBUt2QtqVnQA8waGjIm5I5xfY"
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
-# Ekdum solid aur simple format
+# Ekdum sahi model string format
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 @bot.message_handler(commands=['start', 'help'])
@@ -35,9 +36,12 @@ def reply_to_user(message):
     bot.send_chat_action(message.chat.id, 'typing')
     try:
         response = model.generate_content(user_text)
-        bot.reply_to(message, response.text)
+        if response.text:
+            bot.reply_to(message, response.text)
+        else:
+            bot.reply_to(message, "Google ne koi jawab nahi diya bhai.")
     except Exception as e:
-        # Agar abhi bhi koi dikat aayi toh bot chat me khud batayega!
+        # Agar koi dikkat aayegi toh seedha chat me batayega
         bot.reply_to(message, f"Galti mili bhai: {str(e)}")
 
 if __name__ == "__main__":
@@ -49,5 +53,6 @@ if __name__ == "__main__":
         try:
             bot.infinity_polling(timeout=10, long_polling_timeout=5)
         except Exception as e:
+            print(f"Polling error: {e}")
             time.sleep(5)
-            
+        
