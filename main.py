@@ -18,7 +18,7 @@ def run_web_server():
     app.run(host='0.0.0.0', port=port)
 
 # --- BOT CONFIGURATION ---
-BOT_TOKEN = "8974797579:AAE_CVNm2hcIZr869PYzwOEMUK6MlpTEbPA"
+BOT_TOKEN = "8974797579:AAEC_gGu-gn_isb6YtaMel41o2-v7c0i8pI"
 GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
 
 bot = telebot.TeleBot(BOT_TOKEN)
