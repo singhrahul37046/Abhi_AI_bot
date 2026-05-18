@@ -13,7 +13,6 @@ def home():
     return "Abhi AI Bot is Alive!"
 
 def run_web_server():
-    # Render automatically $PORT environment variable deta hai
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
@@ -23,7 +22,9 @@ GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
 
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Hamein ek dum safe aur stable model use karna chahiye
+model = genai.GenerativeModel("gemini-pro")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -36,19 +37,25 @@ def reply_to_user(message):
     bot.send_chat_action(message.chat.id, 'typing')
     try:
         response = model.generate_content(user_text)
-        bot.reply_to(message, response.text)
+        # Agar response mein text milta hai toh reply karo
+        if response.text:
+            bot.reply_to(message, response.text)
+        else:
+            bot.reply_to(message, "Sorry bhai, mujhe iska jawab nahi mila. Kuch aur poochiye!")
     except Exception as e:
-        bot.reply_to(message, "Sorry bhai, ek baar fir se koshish karo!")
+        # Agar koi badi galti ho toh hume error log mein pata chal jayega
+        print(f"Error: {e}")
+        bot.reply_to(message, f"Sorry bhai, ek baar fir se koshish karo! (Error: {str(e)[:50]})")
 
-# Dono cheezein saath mein chalane ke liye thread ka use
 if __name__ == "__main__":
-    # Web server chalu karo taaki Render ko signal milta rahe
     t = Thread(target=run_web_server)
     t.start()
     
     print("🟢 Bot starting...")
     while True:
         try:
-            bot.infinity_polling()
+            bot.infinity_polling(timeout=10, long_polling_timeout=5)
         except Exception as e:
+            print(f"Polling Error: {e}")
             time.sleep(5)
+            
