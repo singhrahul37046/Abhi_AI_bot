@@ -23,8 +23,8 @@ GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
-# Hamein ek dum safe aur stable model use karna chahiye
-model = genai.GenerativeModel("gemini-pro")
+# Ekdum naya aur recommended model format
+model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -36,14 +36,13 @@ def reply_to_user(message):
     user_text = message.text
     bot.send_chat_action(message.chat.id, 'typing')
     try:
+        # Naye tareeqe se content generate karna
         response = model.generate_content(user_text)
-        # Agar response mein text milta hai toh reply karo
         if response.text:
             bot.reply_to(message, response.text)
         else:
-            bot.reply_to(message, "Sorry bhai, mujhe iska jawab nahi mila. Kuch aur poochiye!")
+            bot.reply_to(message, "Sorry bhai, mujhe iska jawab nahi mila.")
     except Exception as e:
-        # Agar koi badi galti ho toh hume error log mein pata chal jayega
         print(f"Error: {e}")
         bot.reply_to(message, f"Sorry bhai, ek baar fir se koshish karo! (Error: {str(e)[:50]})")
 
@@ -58,4 +57,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Polling Error: {e}")
             time.sleep(5)
-            
+    
