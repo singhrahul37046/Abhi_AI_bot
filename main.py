@@ -23,8 +23,8 @@ GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
-# Ekdum naya aur fully supported model name
-model = genai.GenerativeModel("gemini-2.0-flash")
+# Ekdum simple aur sahi format bina kisi 'models/' ke
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -56,4 +56,3 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Polling Error: {e}")
             time.sleep(5)
-            
