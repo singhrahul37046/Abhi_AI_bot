@@ -5,7 +5,6 @@ from threading import Thread
 import telebot
 import google.generativeai as genai
 
-# Render ko zinda rakhne ke liye ek chota sa web server
 app = Flask('')
 
 @app.route('/')
@@ -17,19 +16,18 @@ def run_web_server():
     app.run(host='0.0.0.0', port=port)
 
 # --- BOT CONFIGURATION ---
-BOT_TOKEN = "8974797579:AAFR8WKA8t0BrgbJJspmWijZVxNoostPktA"
+BOT_TOKEN = "8974797579:AAEC_gGu-gn_isb6YtaMel41o2-v7c0i8pI"
 GEMINI_KEY = "AIzaSyA5V-kWwYOBUt2QtqVnQA8waGjIm5I5xfY"
 
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
-# Ekdum simple aur sahi format bina kisi 'models/' ke
+# Ekdum solid aur simple format
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    welcome_text = "🚀 *Welcome Bhai!*\n\nMain hoon aapka apna *Abhi AI Chatbot*.\nApna sawaal niche type karo 👇"
-    bot.reply_to(message, welcome_text, parse_mode="Markdown")
+    bot.reply_to(message, "🚀 *Welcome Bhai!*\n\nMain zinda hoon! Apna sawaal pucho.", parse_mode="Markdown")
 
 @bot.message_handler(func=lambda message: True)
 def reply_to_user(message):
@@ -37,13 +35,10 @@ def reply_to_user(message):
     bot.send_chat_action(message.chat.id, 'typing')
     try:
         response = model.generate_content(user_text)
-        if response.text:
-            bot.reply_to(message, response.text)
-        else:
-            bot.reply_to(message, "Sorry bhai, mujhe iska jawab nahi mila.")
+        bot.reply_to(message, response.text)
     except Exception as e:
-        print(f"Error: {e}")
-        bot.reply_to(message, f"Sorry bhai, ek baar fir se koshish karo! (Error: {str(e)[:50]})")
+        # Agar abhi bhi koi dikat aayi toh bot chat me khud batayega!
+        bot.reply_to(message, f"Galti mili bhai: {str(e)}")
 
 if __name__ == "__main__":
     t = Thread(target=run_web_server)
@@ -54,5 +49,5 @@ if __name__ == "__main__":
         try:
             bot.infinity_polling(timeout=10, long_polling_timeout=5)
         except Exception as e:
-            print(f"Polling Error: {e}")
             time.sleep(5)
+            
