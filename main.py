@@ -18,7 +18,7 @@ def run_web_server():
 
 # --- BOT CONFIGURATION ---
 BOT_TOKEN = "8974797579:AAEC_gGu-gn_isb6YtaMel41o2-v7c0i8pI"
-GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
+GEMINI_KEY = "AIzaSyA5V-kWwYOBUt2QtqVnQA8waGjIm5I5xfY"
 
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
