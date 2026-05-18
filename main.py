@@ -23,8 +23,8 @@ GEMINI_KEY = "AIzaSyDZ1RQ67W09gQxrXXs0bd2wlVsXX3JDbj4"
 bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
-# Ekdum naya aur recommended model format
-model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+# Ekdum naya aur fully supported model name
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -36,7 +36,6 @@ def reply_to_user(message):
     user_text = message.text
     bot.send_chat_action(message.chat.id, 'typing')
     try:
-        # Naye tareeqe se content generate karna
         response = model.generate_content(user_text)
         if response.text:
             bot.reply_to(message, response.text)
@@ -57,4 +56,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Polling Error: {e}")
             time.sleep(5)
-    
+            
