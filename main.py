@@ -24,7 +24,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 genai.configure(api_key=GEMINI_KEY)
 
 # Ekdum sahi model string format
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
